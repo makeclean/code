@@ -32,7 +32,7 @@ release:
 	@echo "Building xx19 RELEASE"
 	$(MAKE) xx19 \
 	FFLAGS="-c -I$(MODULE) $(XX19_MPI_REL_FFLAGS)" \
-	LDFLAGS="-L$(LIB) -lParaFEM_mpi.$(VERSION) $(XX19_MPI_REL_LDFLAGS)"
+	LDFLAGS="-L$(LIB) -lParaFEM_mpi.$(VERSION) -larpack_$(MACHINE) $(XX19_MPI_REL_LDFLAGS)"
 	@echo "Done xx19 RELEASE"
 
 debug:

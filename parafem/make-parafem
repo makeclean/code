@@ -349,6 +349,7 @@ if [ $BUILD_LIBRARIES = 1 ]; then
     echo "Building LIBRARIES for $MACHINE"
     echo "---------------------------------------------------------------------"
     cd $PARAFEM_HOME
+    mkdir lib
     cd src/libraries && make $LIBRARIES_TARGET && cd ../..
     if [ $? = 2 ]; then	error "LIBRARIES/$LIBRARIES_TARGET"; fi
     echo "Done building LIBRARIES for $MACHINE"
@@ -360,12 +361,18 @@ if [ $BUILD_MODULES = 1 ]; then
     echo "Building MODULES for $MACHINE"
     echo "---------------------------------------------------------------------"
     cd $PARAFEM_HOME
+    mkdir include
+    mkdir include/bem
+    mkdir include/bem_p
+    mkdir include/mpi
+    mkdir serial
     cd src/modules && make $MODULES_TARGET && cd ../..
     if [ $? = 2 ]; then	error "MODULES/$MODULES_TARGET"; fi
     echo "Done building MODULES for $MACHINE"
 fi
 
 if [ $BUILD_PROGRAMS = 1 ]; then
+    mkdir bin
     echo
     echo "---------------------------------------------------------------------"
     echo "Building PROGRAMS for $MACHINE"
