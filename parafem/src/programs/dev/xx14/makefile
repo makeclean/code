@@ -43,14 +43,14 @@ EXE=	$(SRC:.f90=.x)
 
 .SUFFIXES: .o .f90 .x
 
-all: release
+all: clean
 
 release:
 	@echo
 	@echo "Building XX14 RELEASE"
-	$(MAKE) $(EXE) \
-	FFLAGS="-c -I$(MODULE) $(XX14_MPI_REL_FFLAGS)" \
-	LDFLAGS="-L$(LIB) -lParaFEM_mpi.$(VERSION) $(XX14_MPI_REL_LDFLAGS)"
+	#$(MAKE) $(EXE) \
+	#FFLAGS="-c -I$(MODULE) $(XX14_MPI_REL_FFLAGS)" \
+	#LDFLAGS="-L$(LIB) -lParaFEM_mpi.$(VERSION) $(XX14_MPI_REL_LDFLAGS)"
 	@echo "Done" $(EXE) "RELEASE"
 
 debug:
@@ -71,7 +71,7 @@ $(OBJ): $(CGPACK)
 	$(FC) $< -o $@ $(LDFLAGS)
 
 install:
-	cp $(EXE) $(BIN_DIR)
+	echo "not building xx14"
 
 clean:
 	rm -f $(OBJ)
