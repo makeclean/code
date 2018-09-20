@@ -81,47 +81,47 @@ use mero_fortran
 implicit none
 real(kind=C_DOUBLE), allocatable :: array(:) ! data to fill
 type(C_PTR) :: p
-real(C_DOUBLE), pointer :: array_recieved(:)
-integer(C_INT) :: i ! loop variable
-integer(C_INT) :: array_size
-integer(C_INT) :: block_size = 4096
-integer(C_INT) :: block_count 
-integer(C_INT64_T) :: idhi
-integer(C_INT64_T) :: idlo
+real(kind=C_DOUBLE), pointer :: array_recieved(:)
+integer(kind=C_INT) :: i,j ! loop variable
+integer(kind=C_INT) :: array_size
+integer(kind=C_INT) :: block_size = 4096
+integer(kind=C_INT) :: block_count 
+integer(kind=C_INT64_T) :: idhi
+integer(kind=C_INT64_T) :: idlo
 
 ! mero procedures
 procedure(start_clovis)  :: mero_start  ! start mero
 procedure(finish_clovis) :: mero_finish ! end mero
 procedure(recieve_array) :: mero_recieve_array_double ! send array
 
-write(*,*) 'enter array size, blockcount, idhi, idlo'
-! read the data
-do i = 1,3
-  read(*,*) array_size,block_count,idhi,idlo
-enddo
-
-stop 
 
 call mero_start()
 
-allocate(array_recieved(array_size))
-
-call mero_recieve_array_double(p,array_size,block_size,block_count,idhi,idlo)
-call C_F_POINTER(p,array_recieved,[array_size])
-
 ! write the ensight gold mesh
 open(12,file="p121_medium.ensi.DISPL-000001",status='replace',       &
-     action='write')
+               action='write')
 write(12,'(A)') "Alya Ensight Gold --- Vector per-node variable file"
 write(12,'(A/A/A)') "part", "     1","coordinates"
-do i  = 1, array_size
-  write(12,*) array_recieved(i)
+
+write(*,*) 'enter blockcount, array size, idhi, idlo'
+! read the data
+do i = 1,3
+  read(*,*) block_count, array_size, idhi, idlo
+
+  allocate(array_recieved(array_size))
+  call mero_recieve_array_double(p,array_size,block_size,block_count,idhi,idlo)
+  call C_F_POINTER(p,array_recieved,[array_size])
+
+  do j  = 1, array_size
+     write(12,*) array_recieved(j)
+  enddo
+
+  deallocate(array_recieved)
+
 enddo
 close(12) 
 
 call mero_finish()
-
-deallocate(array_recieved)
 
 end program p121_get_ensi
 
