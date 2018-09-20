@@ -22,7 +22,7 @@ include ../../../../build/mk_defs.inc
 include ../../../../build/$(MACHINE).inc
 
 MERO_DIR = $(HOME)/array_work/
-MERO_LD_FLAGS = -L$(MERO_DIR) -lmeroarray
+MERO_LD_FLAGS = -L$(MERO_DIR) -lmeroarray 
 
 MODULE	= ../../../../include/mpi
 LIB	= ../../../../lib
@@ -43,6 +43,12 @@ release:
 	FFLAGS="-c -I$(MODULE) $(P121_MPI_REL_FFLAGS)" \
 	LDFLAGS="-L$(LIB) $(MERO_LD_FLAGS) -lParaFEM_mpi.$(VERSION) $(P121_MPI_REL_LDFLAGS)"
 	@echo "Done p121_mero RELEASE"
+	@echo
+	@echo "Building P121_GET_ENSI RELEASE"
+	$(MAKE) p121_get_ensi \
+	FFLAGS="-c -I$(MODULE) $(P121_MPI_REL_FFLAGS)" \
+	LDFLAGS="-L$(LIB) $(MERO_LD_FLAGS) -lParaFEM_mpi.$(VERSION) $(P121_MPI_REL_LDFLAGS)"
+	@echo "Done p121_get_ensi RELEASE"
 
 debug:
 	@echo
@@ -64,6 +70,12 @@ p121_mero: p121_mero.o
 p121_mero.o: p121_mero.f90
 	$(FC) p121_mero.f90 $(FFLAGS)
 
+p121_get_ensi: p121_get_ensi.o
+	$(FC) p121_get_ensi.o -o p121_get_ensi $(LDFLAGS) $(MERO_LD_FLAGS)
+
+p121_get_ensi.o: p121_get_ensi.f90
+	$(FC) p121_get_ensi.f90 $(FFLAGS)
+
 clean:
 	rm -f *.o
 
@@ -75,6 +87,7 @@ relink: p121
 install:
 	cp p121 ../../../../bin
 	cp p121_mero ../../../../bin
+	cp p121_get_ensi ../../../../bin
 
 test:
 	./test.sh p121

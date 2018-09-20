@@ -10,7 +10,7 @@ PROGRAM p121
  USE global_variables
  USE mp_interface
  USE input
- USE output, only : write_vtk, dismsh_ensi_p 
+ USE output, only : dismsh_ensi_p 
  USE loading
  USE timing
  USE maths, only : max_p, determinant, invert, sum_p, dot_product_p, &
@@ -155,12 +155,6 @@ PROGRAM p121
    WRITE(11,'(A,E12.4)')"The central nodal displacement is :",xnew_pp(1)
  END IF
  DEALLOCATE(p_pp,r_pp,x_pp,u_pp,d_pp,diag_precon_pp,storkm_pp,pmul_pp) 
-
- open(unit=13,file='output.vtk',status='unknown')
- allocate(temp(1000))
- call write_vtk(13, npes, numpe, nodes_pp, g_coord_pp, g_num_pp, temp)
- deallocate(temp)
- close(13)
 
 !--------------- recover stresses at centroidal gauss point --------------
  ALLOCATE(eld_pp(ntot,nels_pp))
